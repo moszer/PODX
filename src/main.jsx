@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Register from './Register.jsx';
+import Connect from './Connect.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/Register",
     element: <Register />,
+  },
+  {
+    path: "/Connect",
+    element: <Connect />,
   },
 ]);
 
