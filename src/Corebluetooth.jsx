@@ -7,10 +7,12 @@ import axios from 'axios';
 const uuidService = 0x0180;
 const uuidRx = 0xDEAD; // UUID to receive data from ESP32 0xDEAD
 const uuidTx = 0xFEF4; // UUID to transfer data to ESP32 0xFEF4
+const uuidSendmode = 0xFEAD;
 
 const useBluetooth = () => {
   const [device, setDevice] = useState(null);
   const [characteristic, setCharacteristic] = useState(null);
+  const [SETMODE, setMode] = useState(null);
   const [receivedData, setReceivedData] = useState("");
   const [error, setError] = useState("");
   const [fileInput, setFileInput] = useState(null);
@@ -47,13 +49,16 @@ const useBluetooth = () => {
       const characteristic = await service.getCharacteristic(uuidRx);
       console.log("Characteristic Properties:", characteristic.properties);
 
+      const SENDMODE = await service.getCharacteristic(uuidSendmode);
+      console.log("SENDMODE Properties:", SENDMODE.properties);
+
       console.log("Getting callback OTA size...");
       const callbackOtaSize = await service.getCharacteristic(uuidTx);
 
       setDevice(device);
+      setMode(SENDMODE);
       
       localStorage.setItem('DeviceName', device.name);
-
       setCharacteristic(characteristic);
       setTodoList({ ...todoList, characteristic: characteristic});
 
@@ -137,7 +142,17 @@ const useBluetooth = () => {
       return;
     }
   };
-  
+
+  const send_mode = async () => {
+    try {
+      const data_ = localStorage.getItem("valueMode");
+      const encoder = new TextEncoder();
+      const data = encoder.encode(data_);
+      await SETMODE.writeValue(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     if (parsedData) {
@@ -182,7 +197,8 @@ const useBluetooth = () => {
     disconnectDevice,
     sendFile,
     setFileInput,
-    fetchData
+    fetchData,
+    send_mode
   };
 };
 

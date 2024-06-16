@@ -10,10 +10,6 @@ export default function Connect() {
     const navigate = useNavigate();
     const Register = () => navigate('/Register');
 
-    // Retrieving the DeviceName from localStorage
-    const Device_name = localStorage.getItem('DeviceName');
-
-
     return (
         <div className='overflow-x-hidden overflow-y-hidden'>
             {true ? (

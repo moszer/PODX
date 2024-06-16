@@ -6,6 +6,7 @@ export const todoListAtom = atom({
     deviceName: "", // Initial state for deviceName
     firmwareDataByte: 0,
     statusUpdate: false,
-    characteristic: null
+    characteristic: null,
+    selectmode: 0
   },
 });
