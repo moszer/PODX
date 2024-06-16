@@ -86,7 +86,7 @@ const useBluetooth = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/fetch-firmware', {
+      const response = await axios.get('https://apifirmware-podx.vercel.app/fetch-firmware', {
         responseType: 'arraybuffer', // Ensure the response is treated as binary data
       });
       
