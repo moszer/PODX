@@ -110,7 +110,7 @@ export default function Setting() {
       </div>
     );
 
-    if (todoList.statusUpdate == true) {
+    if (modalUpdate != true) {
       if (todoList.characteristic != null) {
         setmodalSlectmode(true);
       } else {
