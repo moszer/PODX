@@ -14,11 +14,19 @@ export default function Setting() {
   const Device_name = localStorage.getItem("DeviceName");
   const fileInputRef = useRef(null);
   const [modalUpdate, setmodalUpdate] = useState(false);
+  const [modalSlectmode, setmodalSlectmode] = useState(false);
 
-  const { fetchData, connectToDevice, send_mode} = useBluetooth();
+  const { fetchData, connectToDevice, send_mode } = useBluetooth();
 
   const todoList = useRecoilValue(todoListAtom);
   const maxfirmware = localStorage.getItem("firmwareMax");
+
+
+  useEffect(() => {
+    if (todoList.statusUpdate) {
+      setmodalUpdate(false);
+    }
+  }, [todoList.statusUpdate]);
 
   const Firmware = () => {
     const softwareComponentHtml = ReactDOMServer.renderToString(
@@ -37,60 +45,101 @@ export default function Setting() {
       </div>
     );
 
-    if (todoList.characteristic != null) {
-      Swal.fire({
-        title: "FIRMWARE",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonColor: "#1B1A17",
-        cancelButtonColor: "#1B1A17",
-        background: "#1B1A17",
-        confirmButtonText: "UPDATE",
-        html: softwareComponentHtml,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          //
-          setmodalUpdate(true);
-          fetchData();
-        }
-      });
+    if (modalUpdate != true) {
+      if (todoList.characteristic != null) {
+        Swal.fire({
+          title: "FIRMWARE",
+          text: "You won't be able to revert this!",
+          showCancelButton: true,
+          confirmButtonColor: "#1B1A17",
+          cancelButtonColor: "#1B1A17",
+          background: "#1B1A17",
+          confirmButtonText: "UPDATE",
+          html: softwareComponentHtml,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //
+            setmodalUpdate(true);
+            fetchData();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "CONNECT",
+          text: "You won't be able to revert this!",
+          showCancelButton: true,
+          confirmButtonColor: "#1B1A17",
+          cancelButtonColor: "#1B1A17",
+          background: "#1B1A17",
+          confirmButtonText: "CONNECT",
+          html: ConnectComponenentHtml,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            connectToDevice();
+          }
+        });
+      }
     } else {
-      Swal.fire({
-        title: "CONNECT",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonColor: "#1B1A17",
-        cancelButtonColor: "#1B1A17",
-        background: "#1B1A17",
-        confirmButtonText: "CONNECT",
-        html: ConnectComponenentHtml,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          connectToDevice();
-        }
-      });
+        Swal.fire({
+            title: "FIRMWARE CAUTION",
+            text: "Firmware is loading plese wait...",
+            showCancelButton: true,
+            showConfirmButton: false,
+            cancelButtonColor: "#1B1A17",
+            background: "#1B1A17",
+          });
     }
   };
-
-  useEffect(() => {
-    if (todoList.statusUpdate) {
-      setmodalUpdate(false);
-    }
-  }, [todoList.statusUpdate]);
 
   // State to store the value of the range input
 
   const [value, setValue] = useState(localStorage.getItem("valueMode") || 50);
-
   // Function to handle change in range input value
   const handleChange = (e) => {
     setValue(parseInt(e.target.value, 10));
     localStorage.setItem("valueMode", parseInt(e.target.value, 10));
     send_mode();
   };
-
   // Calculate the number of spans based on the value
-  const numSpans = Math.ceil(value / 10); // Each step is 25
+  const numSpans = Math.ceil(value / 10); // Each step is 10
+
+  const openmodalSlectmode = () => {
+    const ConnectComponenentHtml = ReactDOMServer.renderToString(
+      <div className="p-4">
+        <b>Plese connect before select mode</b>
+      </div>
+    );
+
+    if (todoList.statusUpdate == true) {
+      if (todoList.characteristic != null) {
+        setmodalSlectmode(true);
+      } else {
+        Swal.fire({
+          title: "CONNECT",
+          text: "You won't be able to revert this!",
+          showCancelButton: true,
+          confirmButtonColor: "#1B1A17",
+          cancelButtonColor: "#1B1A17",
+          background: "#1B1A17",
+          confirmButtonText: "CONNECT",
+          html: ConnectComponenentHtml,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            connectToDevice();
+          }
+        });
+      }
+    } else {
+      Swal.fire({
+        title: "FIRMWARE CAUTION",
+        text: "Firmware is loading plese wait...",
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: "#1B1A17",
+        background: "#1B1A17",
+      });
+    }
+  };
 
   return (
     <div className="w-full bg-black">
@@ -112,30 +161,39 @@ export default function Setting() {
         <></>
       )}
 
-      <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-stone-800 z-50">
-        <div className="flex justify-center grid grid-rows-3 p-4">
-          <div className="w-[300px] pt-4">
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={value}
-              className="range range-lg"
-              step={10}
-              onChange={handleChange}
-            />
-            <div className="w-full flex justify-between text-xs px-2">
-              {/* Generate spans dynamically */}
-              {Array.from({ length: numSpans }).map((_, index) => (
-                <span key={index}>|</span>
-              ))}
+      {modalSlectmode ? (
+        <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-stone-800 z-50">
+          <div className="flex justify-center grid grid-rows-3 p-4">
+            <div className="w-[300px] pt-4">
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={value}
+                className="range range-lg"
+                step={10}
+                onChange={handleChange}
+              />
+              <div className="w-full flex justify-between text-xs px-2">
+                {/* Generate spans dynamically */}
+                {Array.from({ length: numSpans }).map((_, index) => (
+                  <span key={index}>|</span>
+                ))}
+              </div>
+            </div>
+            <div className="flex justify-center pt-8">
+              <button
+                className="btn w-[200px]"
+                onClick={() => setmodalSlectmode(false)}
+              >
+                CLOSE
+              </button>
             </div>
           </div>
-          <div className="flex justify-center pt-8">
-            <button className="btn w-[200px]">Save</button>
-          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
 
       <div className="flex justify-center grid grid-rows-4 gap-4">
         <div className="pt-4">
@@ -169,7 +227,10 @@ export default function Setting() {
           </div>
 
           <div className="pt-2">
-            <div className="btn w-[360px] h-[89px] rounded-[15px] bg-stone-900">
+            <div
+              className="btn w-[360px] h-[89px] rounded-[15px] bg-stone-900"
+              onClick={() => openmodalSlectmode()}
+            >
               <Power />
               SLECT MODE
             </div>
@@ -177,7 +238,7 @@ export default function Setting() {
           <div className="pt-2">
             <div
               className="btn w-[360px] h-[89px] rounded-[15px] bg-stone-900"
-              onClick={Firmware}
+              onClick={() => Firmware()}
             >
               <Software /> FIRMWARE
             </div>
