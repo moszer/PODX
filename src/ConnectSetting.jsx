@@ -9,6 +9,8 @@ import useBluetooth from "./Corebluetooth";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { todoListAtom } from "./recoil/atom/todoAtom.js"; // Assuming your Recoil atom is defined in atoms.js
 import { useEffect, useRef, useState } from "react";
+import Spline from '@splinetool/react-spline';
+
 
 export default function Setting() {
   const Device_name = localStorage.getItem("DeviceName");
@@ -197,8 +199,11 @@ export default function Setting() {
 
       <div className="flex justify-center grid grid-rows-4 gap-4">
         <div className="pt-4">
-          <div className="w-[360px] h-[500px] rounded-[60px] bg-stone-900">
+          <div className="w-[360px] h-[450px] rounded-[60px] bg-stone-900">
             <div className="flex justify-center pt-4">{Device_name}</div>
+            <div className="h-[500px] ml-[-20px] flex justify-center">
+                <Spline scene="https://draft.spline.design/g3pJfFHlS1u4gNq3/scene.splinecode" />
+            </div>
           </div>
         </div>
         <div className="">
