@@ -225,7 +225,7 @@ export default function Setting() {
               </div>
             </div>
             <div className="pt-4">
-              <div className="btn w-[177px] h-[184px] rounded-[15px] bg-stone-900">
+              <div className="btn w-[177px] h-[184px] rounded-[15px] bg-stone-900" onClick={() => connectToDevice()}>
                 <Chart />
                 <div className="mb-5">DATA OF VAPE</div>
               </div>

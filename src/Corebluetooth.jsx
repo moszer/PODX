@@ -36,11 +36,14 @@ const useBluetooth = () => {
     try {
       const device = await navigator.bluetooth.requestDevice({
         filters: [{ name: "ESP32 dev" }],
-        //optionalServices: [uuidService],
-      });
+        optionalServices: [uuidService]
+    });
+    
 
       console.log("Connecting to GATT server...");
       const server = await device.gatt.connect();
+
+      console.log(server);
 
       console.log("Getting primary service...");
       const service = await server.getPrimaryService(uuidService);
