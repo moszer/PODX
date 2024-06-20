@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { todoListAtom } from "./recoil/atom/todoAtom.js"; // Assuming your Recoil atom is defined in atoms.js
 import axios from 'axios';
+import { browserName } from "react-device-detect";
 
 const uuidService = 0x0180;
 const uuidRx = 0xDEAD; // UUID to receive data from ESP32 0xDEAD
@@ -32,6 +33,8 @@ const useBluetooth = () => {
       setError("Bluetooth API is not supported by this browser.");
       return;
     }
+
+    alert(browserName);
 
     try {
       const device = await navigator.bluetooth.requestDevice({
