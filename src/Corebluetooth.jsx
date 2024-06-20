@@ -33,57 +33,67 @@ const useBluetooth = () => {
       setError("Bluetooth API is not supported by this browser.");
       return;
     }
-
+  
     try {
-        let device;
-
-        if (browserName === "Chrome" || browserName == "Mobile Safari") {
-          device = await navigator.bluetooth.requestDevice({
-            filters: [{ name: "ESP32 dev" }],
-            optionalServices: [uuidService]
-          });
-        } else if (browserName === "WebKit") {
-          device = await navigator.bluetooth.requestDevice({
-            filters: [{ name: "ESP32 dev" }]
-          });
-        } else {
+      let device;
+      const filterOptions = { filters: [{ name: "ESP32 dev" }] };
+      const optionsWithService = { ...filterOptions, optionalServices: [uuidService] };
+  
+      console.log(`Browser detected: ${browserName}`);
+      switch (browserName) {
+        case "Chrome":
+        case "Mobile Safari":
+        case "Brave":
+          device = await navigator.bluetooth.requestDevice(optionsWithService);
+          break;
+        case "WebKit":
+          device = await navigator.bluetooth.requestDevice(filterOptions);
+          break;
+        default:
+          alert(`Unsupported browser: ${browserName}`);
           throw new Error("Unsupported browser");
-        }
-    
-
+      }
+  
+      console.log("Device selected:", device);
+  
       console.log("Connecting to GATT server...");
       const server = await device.gatt.connect();
-
-      console.log(server);
-
+  
+      console.log("GATT server connected:", server);
+  
       console.log("Getting primary service...");
       const service = await server.getPrimaryService(uuidService);
-
-      console.log("Getting OTA service...");
+  
+      console.log("Primary service retrieved:", service);
+  
+      console.log("Getting OTA service characteristic...");
       const characteristic = await service.getCharacteristic(uuidRx);
       console.log("Characteristic Properties:", characteristic.properties);
-
+  
       const SENDMODE = await service.getCharacteristic(uuidSendmode);
       console.log("SENDMODE Properties:", SENDMODE.properties);
-
-      console.log("Getting callback OTA size...");
+  
+      console.log("Getting callback OTA size characteristic...");
       const callbackOtaSize = await service.getCharacteristic(uuidTx);
-
+  
+      console.log("Callback OTA size characteristic retrieved");
+  
       setDevice(device);
       setMode(SENDMODE);
       
       localStorage.setItem('DeviceName', device.name);
       setCharacteristic(characteristic);
-      setTodoList({ ...todoList, characteristic: characteristic});
-
+      setTodoList({ ...todoList, characteristic });
+  
       callbackOtaSize.addEventListener(
         "characteristicvaluechanged",
         handleCallbackOtaSize
       );
       await callbackOtaSize.startNotifications();
+      console.log("Notifications started for callback OTA size characteristic");
     } catch (error) {
       console.error(`Error connecting to BLE device: ${error}`);
-      setError(`Error connecting to BLE device: ${error}`);
+      setError(`Error connecting to BLE device: ${error.message}`);
     }
   };
 
@@ -167,32 +177,6 @@ const useBluetooth = () => {
       console.log(err);
     }
   }
-
-  useEffect(() => {
-    if (parsedData) {
-      try {
-        const parsedValue = JSON.parse(parsedData);
-        if (parsedValue && typeof parsedValue === "object") {
-          console.log(parsedValue);
-          setCallbackSize(parsedValue.ota_size);
-          setReceivedData(parsedValue.msg_status);
-          setSegmentCallback(parsedValue.Segment);
-          setTotalByte(parsedValue.Total_byte);
-          setUseByte(parsedValue.Use_byte);
-          if (fileInput) {
-            const percentOta =
-              (parsedValue.ota_size / fileInput.files[0].size) * 100;
-            setLoadPercent(percentOta);
-          }
-        } else {
-          console.error("Parsed value is null or not an object");
-        }
-      } catch (error) {
-        console.error("Error parsing data:", error);
-        setError("Error parsing data");
-      }
-    }
-  }, [parsedData, fileInput]);
 
   return {
     device,
