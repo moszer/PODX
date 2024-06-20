@@ -25,6 +25,16 @@ export default function Setting() {
   const todoList = useRecoilValue(todoListAtom);
   const maxfirmware = localStorage.getItem("firmwareMax");
 
+  
+  const [theme, setTheme] = useState('cyberpunk'); // Default theme
+  useEffect(() => {
+    const defaultTheme = localStorage.getItem('Theme');
+    if (defaultTheme) {
+      setTheme(defaultTheme);
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]); // This runs every time 'theme' changes
+
 
   useEffect(() => {
     if (todoList.statusUpdate) {
@@ -200,15 +210,13 @@ export default function Setting() {
         // <Spline scene="https://draft.spline.design/g3pJfFHlS1u4gNq3/scene.splinecode" />
       )}
 
-      <div className="flex justify-center grid grid-rows-4 gap-4">
-        <div className="pt-4">
+      <div className="flex justify-center grid grid-rows-4">
+        <div className="pb4]">
           <div className="w-[360px] h-[450px] rounded-[60px] bg-neutral">
             <div className="flex justify-center pt-4">{Device_name}</div>
-            <div className="h-[500px] ml-[-20px] pb-[50px] mt-[-20px] flex justify-center">
-               
-            </div>
           </div>
         </div>
+
         <div className="">
           <div className="w-[360px] h-[89px] rounded-[15px] bg-neutral">
             <div className="flex">
@@ -252,7 +260,6 @@ export default function Setting() {
             </div>
           </div>
          <Navigation />
-         <ThemeSelector />
         </div>
       </div>
     </div>
