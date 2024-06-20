@@ -10,6 +10,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { todoListAtom } from "./recoil/atom/todoAtom.js"; // Assuming your Recoil atom is defined in atoms.js
 import { useEffect, useRef, useState } from "react";
 import Spline from '@splinetool/react-spline';
+import ThemeSelector from "./Themeselector.jsx";
+import Navigation from "./Navigation.jsx";
 
 
 export default function Setting() {
@@ -144,9 +146,9 @@ export default function Setting() {
   };
 
   return (
-    <div className="w-full bg-black">
+    <div className="w-full bg-base-200">
       {modalUpdate ? (
-        <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-stone-800 z-50">
+        <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-secondary z-50">
           <div className="flex justify-center grid grid grid-rows-4 p-4">
             <div className="flex justify-center">
               SOFTWARE UPDATE IS RUNNING...
@@ -164,7 +166,7 @@ export default function Setting() {
       )}
 
       {modalSlectmode ? (
-        <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-stone-800 z-50">
+        <div className="fixed bottom-0 w-full h-[200px] rounded-t-[60px] bg-primary z-50">
           <div className="flex justify-center grid grid-rows-3 p-4">
             <div className="w-[300px] pt-4">
               <input
@@ -200,7 +202,7 @@ export default function Setting() {
 
       <div className="flex justify-center grid grid-rows-4 gap-4">
         <div className="pt-4">
-          <div className="w-[360px] h-[450px] rounded-[60px] bg-stone-900">
+          <div className="w-[360px] h-[450px] rounded-[60px] bg-neutral">
             <div className="flex justify-center pt-4">{Device_name}</div>
             <div className="h-[500px] ml-[-20px] pb-[50px] mt-[-20px] flex justify-center">
                
@@ -208,16 +210,16 @@ export default function Setting() {
           </div>
         </div>
         <div className="">
-          <div className="w-[360px] h-[89px] rounded-[15px] bg-stone-900">
+          <div className="w-[360px] h-[89px] rounded-[15px] bg-neutral">
             <div className="flex">
-              <div className="w-[180px] h-[89px] rounded-[15px] bg-green-500 flex justify-center items-center text-white">
+              <div className="w-[180px] h-[89px] rounded-[15px] bg-primary flex justify-center items-center text-white">
                 50%
               </div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="pt-4">
-              <div className="btn w-[177px] h-[184px] rounded-[15px] bg-stone-900">
+              <div className="btn btn-neutral w-[177px] h-[184px] rounded-[15px]">
                 <div className="flex justify-center items-center">
                   <Color />
                 </div>
@@ -225,7 +227,7 @@ export default function Setting() {
               </div>
             </div>
             <div className="pt-4">
-              <div className="btn w-[177px] h-[184px] rounded-[15px] bg-stone-900">
+              <div className="btn btn-neutral w-[177px] h-[184px] rounded-[15px]">
                 <Chart />
                 <div className="mb-5">DATA OF VAPE</div>
               </div>
@@ -234,7 +236,7 @@ export default function Setting() {
 
           <div className="pt-2">
             <div
-              className="btn w-[360px] h-[89px] rounded-[15px] bg-stone-900"
+              className="btn btn-neutral w-[360px] h-[89px] rounded-[15px]"
               onClick={() => openmodalSlectmode()}
             >
               <Power />
@@ -243,12 +245,14 @@ export default function Setting() {
           </div>
           <div className="pt-2">
             <div
-              className="btn w-[360px] h-[89px] rounded-[15px] bg-stone-900"
+              className="btn btn-neutral w-[360px] h-[89px] rounded-[15px]"
               onClick={() => Firmware()}
             >
               <Software /> FIRMWARE
             </div>
           </div>
+         <Navigation />
+         <ThemeSelector />
         </div>
       </div>
     </div>
