@@ -195,6 +195,7 @@ export default function Setting() {
         </div>
       ) : (
         <></>
+        // <Spline scene="https://draft.spline.design/g3pJfFHlS1u4gNq3/scene.splinecode" />
       )}
 
       <div className="flex justify-center grid grid-rows-4 gap-4">
@@ -202,7 +203,7 @@ export default function Setting() {
           <div className="w-[360px] h-[450px] rounded-[60px] bg-stone-900">
             <div className="flex justify-center pt-4">{Device_name}</div>
             <div className="h-[500px] ml-[-20px] pb-[50px] mt-[-20px] flex justify-center">
-                <Spline scene="https://draft.spline.design/g3pJfFHlS1u4gNq3/scene.splinecode" />
+               
             </div>
           </div>
         </div>

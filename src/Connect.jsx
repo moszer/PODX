@@ -1,14 +1,10 @@
-import React, { useState , useEffect} from 'react';
+import React from 'react';
 import LOGO from './components/Logo';
 import BACK from './components/Back'
 import Qrcode from './components/Qrcode';
 import Setting from './ConnectSetting';
 
-import { useNavigate } from 'react-router-dom';
-
 export default function Connect() {
-    const navigate = useNavigate();
-    const Register = () => navigate('/Register');
 
     return (
         <div className='overflow-x-hidden overflow-y-hidden'>
