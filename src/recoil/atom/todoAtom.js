@@ -7,6 +7,7 @@ export const todoListAtom = atom({
     firmwareDataByte: 0,
     statusUpdate: false,
     characteristic: null,
-    selectmode: 0
+    selectmode: 0,
+    Navigate_: "Home"
   },
 });

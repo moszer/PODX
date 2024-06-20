@@ -1,11 +1,16 @@
+// App.jsx
 import React from 'react';
-import Connect from './Connect';
+import { Routes, Route } from 'react-router-dom';
+import Login from './Login.jsx';
+import Register from './Register.jsx';
+import Connect from './Connect.jsx';
 
-function App() {
-    return (
-           <>
-           </>
-    );
-}
+const App = () => (
+  <Routes>
+    <Route path="/Login" element={<Login />} />
+    <Route path="/Register" element={<Register />} />
+    <Route path="/Connect" element={<Connect />} />
+  </Routes>
+);
 
 export default App;

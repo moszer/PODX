@@ -16,14 +16,7 @@ const useBluetooth = () => {
   const [SETMODE, setMode] = useState(null);
   const [receivedData, setReceivedData] = useState("");
   const [error, setError] = useState("");
-  const [fileInput, setFileInput] = useState(null);
-  const [chunkSize, setChunkSize] = useState(128);
-  const [callbackSize, setCallbackSize] = useState(0);
   const [parsedData, setParsedData] = useState(null);
-  const [segmentCallback, setSegmentCallback] = useState(0);
-  const [loadPercent, setLoadPercent] = useState(0);
-  const [totalByte, setTotalByte] = useState(0);
-  const [useByte, setUseByte] = useState(0);
 
   const [todoList, setTodoList] = useRecoilState(todoListAtom);
   
@@ -183,18 +176,10 @@ const useBluetooth = () => {
     characteristic,
     receivedData,
     error,
-    fileInput,
-    chunkSize,
-    callbackSize,
     parsedData,
-    segmentCallback,
-    loadPercent,
-    totalByte,
-    useByte,
     connectToDevice,
     disconnectDevice,
     sendFile,
-    setFileInput,
     fetchData,
     send_mode
   };

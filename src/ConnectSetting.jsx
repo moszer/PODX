@@ -10,22 +10,22 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { todoListAtom } from "./recoil/atom/todoAtom.js"; // Assuming your Recoil atom is defined in atoms.js
 import { useEffect, useRef, useState } from "react";
 import Spline from '@splinetool/react-spline';
-import ThemeSelector from "./Themeselector.jsx";
 import Navigation from "./Navigation.jsx";
+import Setting from "./Setting.jsx";
 
 
-export default function Setting() {
+export default function Connect_Setting() {
   const Device_name = localStorage.getItem("DeviceName");
   const fileInputRef = useRef(null);
   const [modalUpdate, setmodalUpdate] = useState(false);
   const [modalSlectmode, setmodalSlectmode] = useState(false);
-
+  const [Navigate, setNavigate] = useState("Home");
   const { fetchData, connectToDevice, send_mode } = useBluetooth();
 
   const todoList = useRecoilValue(todoListAtom);
   const maxfirmware = localStorage.getItem("firmwareMax");
 
-  
+
   const [theme, setTheme] = useState('cyberpunk'); // Default theme
   useEffect(() => {
     const defaultTheme = localStorage.getItem('Theme');
@@ -155,6 +155,7 @@ export default function Setting() {
     }
   };
 
+if(todoList.Navigate_ === "Home"){
   return (
     <div className="w-full bg-base-200">
       {modalUpdate ? (
@@ -264,4 +265,15 @@ export default function Setting() {
       </div>
     </div>
   );
+} else if (todoList.Navigate_ === "Setting") {
+  return (
+    <>
+     <Setting/>
+     <Navigation />
+    </>
+  );
+} else {
+  alert("ERR PATH");
+}
+
 }
