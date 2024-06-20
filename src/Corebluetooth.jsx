@@ -34,13 +34,21 @@ const useBluetooth = () => {
       return;
     }
 
-    alert(browserName);
-
     try {
-      const device = await navigator.bluetooth.requestDevice({
-        filters: [{ name: "ESP32 dev" }],
-        optionalServices: [uuidService]
-    });
+        let device;
+
+        if (browserName === "Chrome" || browserName == "Mobile Safari") {
+          device = await navigator.bluetooth.requestDevice({
+            filters: [{ name: "ESP32 dev" }],
+            optionalServices: [uuidService]
+          });
+        } else if (browserName === "WebKit") {
+          device = await navigator.bluetooth.requestDevice({
+            filters: [{ name: "ESP32 dev" }]
+          });
+        } else {
+          throw new Error("Unsupported browser");
+        }
     
 
       console.log("Connecting to GATT server...");
