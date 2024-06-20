@@ -131,15 +131,14 @@ const useBluetooth = () => {
     const CHUNK_SIZE = 128; // Maximum chunk size for Bluetooth write
     let offset = 0;
     
-    // Convert data length to an ArrayBuffer
-    const lengthBuffer = new ArrayBuffer(4); // Assuming data length fits in 4 bytes (32-bit unsigned integer)
-    const lengthView = new DataView(lengthBuffer);
-    lengthView.setUint32(0, data.byteLength, true); // Write length as a 32-bit unsigned integer, little-endian
+    const maxFileSize = data.byteLength;
+    const encoder = new TextEncoder();
+    const maxFileSize_data = encoder.encode(maxFileSize);
 
     try {
         // Write the data length first
         
-        await characteristic.writeValue(lengthBuffer);
+        await characteristic.writeValue(maxFileSize_data);
     } catch (error) {
         console.error('Error writing OTA size to characteristic:', error);
         setError('Error writing OTA size to characteristic');
